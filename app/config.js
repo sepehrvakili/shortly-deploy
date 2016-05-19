@@ -40,7 +40,9 @@
 var MongoClient = require('mongodb').MongoClient;
 var db = require('mongoose');
 
-MongoClient.connect('mongodb://localhost/myDb', function(err, db) {
+var source = process.env.DB_ENV || '104.236.165.238';
+
+MongoClient.connect('mongodb://' + source + '/myDb', function(err, db) {
   if (err) {
     console.log(err);
     console.error('Not connected to database');
@@ -49,7 +51,7 @@ MongoClient.connect('mongodb://localhost/myDb', function(err, db) {
   }
 });
 
-db.connect('mongodb://localhost/myDb');
+db.connect('mongodb://' + source + '/myDb');
 
 
 module.exports = db;
