@@ -14,13 +14,13 @@ var Promise = require('bluebird');
 //       callback(isMatch);
 //     });
 //   },
-//   hashPassword: function() {
-//     var cipher = Promise.promisify(bcrypt.hash);
-//     return cipher(this.get('password'), null, null).bind(this)
-//       .then(function(hash) {
-//         this.set('password', hash);
-//       });
-//   }
+  // hashPassword: function() {
+  //   var cipher = Promise.promisify(bcrypt.hash);
+  //   return cipher(this.get('password'), null, null).bind(this)
+  //     .then(function(hash) {
+  //       this.set('password', hash);
+  //     });
+  // }
 // });
 
 var userSchema = new mongoose.Schema({
@@ -32,6 +32,42 @@ var userSchema = new mongoose.Schema({
     timestamps: { createdAt: 'created_at' }
   }
 );
+
+
+// userSchema.post('save', function(attemptedPassword, callback) {
+//   console.log('start user COMPARED');
+//   console.log('PASSWERD', this.get('password'));
+//   bcrypt.compare(attemptedPassword, this.get('password'), function(err, isMatch) {
+//     callback(isMatch);
+//   });
+// });
+
+userSchema.methods.comparePassword = function(attemptedPassword, callback) {
+  console.log('start user COMPARED');
+  console.log('PASSWERD', this.get('password'));
+  bcrypt.compare(attemptedPassword, this.get('password'), function(err, isMatch) {
+    callback(isMatch);
+  });
+};
+
+// post - save is giving us issues with saving items into our db
+// setting models' properties after saving isn't storing in the db
+
+userSchema.post('save', function(password) {
+  var cipher = Promise.promisify(bcrypt.hash);
+  return cipher(this.get('password'), null, null).bind(this)
+    .then(function(hash) {
+      this.set({ password: hash });
+    });
+});
+
+// userSchema.methods.hashPassword = function(password) {
+//   var cipher = Promise.promisify(bcrypt.hash);
+//   return cipher(password, null, null).bind(this)
+//     .then(function(hash) {
+//       return hash;
+//     });
+// };
 
 var User = mongoose.model('User', userSchema);
 

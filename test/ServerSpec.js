@@ -28,7 +28,7 @@ describe('', function() {
       });
   });
 
-  describe('Link creation: ', function() {
+  xdescribe('Link creation: ', function() {
 
     it('Only shortens valid urls, returning a 404 - Not found for invalid urls', function(done) {
       request(app)
@@ -136,7 +136,7 @@ describe('', function() {
 
   }); // 'Link creation'
 
-  describe('Priviledged Access:', function() {
+  xdescribe('Priviledged Access:', function() {
 
     // /*  Authentication  */
     // // TODO: xit out authentication
@@ -174,7 +174,7 @@ describe('', function() {
 
   describe('Account Creation:', function() {
 
-    it('Signup creates a new user', function(done) {
+    xit('Signup creates a new user', function(done) {
       request(app)
         .post('/signup')
         .send({
@@ -190,7 +190,7 @@ describe('', function() {
         .end(done);
     });
 
-    it('Successful signup logs in a new user', function(done) {
+    xit('Successful signup logs in a new user', function(done) {
       request(app)
         .post('/signup')
         .send({
@@ -199,6 +199,7 @@ describe('', function() {
         .expect(302)
         .expect(function(res) {
           expect(res.headers.location).to.equal('/');
+          console.log('start logout...');
           request(app)
             .get('/logout')
             .expect(200);
@@ -208,7 +209,7 @@ describe('', function() {
 
   }); // 'Account Creation'
 
-  xdescribe('Account Login:', function() {
+  describe('Account Login:', function() {
 
     beforeEach(function(done) {
       new User({
@@ -227,12 +228,13 @@ describe('', function() {
           'password': 'Phillip' })
         .expect(302)
         .expect(function(res) {
+          console.log('res', res);
           expect(res.headers.location).to.equal('/');
         })
         .end(done);
     });
 
-    it('Users that do not exist are kept on login page', function(done) {
+    xit('Users that do not exist are kept on login page', function(done) {
       request(app)
         .post('/login')
         .send({
