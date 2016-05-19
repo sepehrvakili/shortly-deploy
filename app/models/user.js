@@ -53,11 +53,12 @@ userSchema.methods.comparePassword = function(attemptedPassword, callback) {
 // post - save is giving us issues with saving items into our db
 // setting models' properties after saving isn't storing in the db
 
-userSchema.post('save', function(password) {
+userSchema.pre('save', function(next) {
   var cipher = Promise.promisify(bcrypt.hash);
   return cipher(this.get('password'), null, null).bind(this)
     .then(function(hash) {
       this.set({ password: hash });
+      next();
     });
 });
 

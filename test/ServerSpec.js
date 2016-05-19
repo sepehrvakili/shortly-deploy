@@ -28,7 +28,7 @@ describe('', function() {
       });
   });
 
-  xdescribe('Link creation: ', function() {
+  describe('Link creation: ', function() {
 
     it('Only shortens valid urls, returning a 404 - Not found for invalid urls', function(done) {
       request(app)
@@ -119,7 +119,7 @@ describe('', function() {
           .end(done);
       });
 
-      xit('Shortcode redirects to correct url', function(done) {
+      it('Shortcode redirects to correct url', function(done) {
         var sha = link.code;
         console.log('SHA IS THIS: ', sha);
         request(app)
@@ -136,7 +136,7 @@ describe('', function() {
 
   }); // 'Link creation'
 
-  xdescribe('Priviledged Access:', function() {
+  describe('Priviledged Access:', function() {
 
     // /*  Authentication  */
     // // TODO: xit out authentication
@@ -174,7 +174,7 @@ describe('', function() {
 
   describe('Account Creation:', function() {
 
-    xit('Signup creates a new user', function(done) {
+    it('Signup creates a new user', function(done) {
       request(app)
         .post('/signup')
         .send({
@@ -190,7 +190,7 @@ describe('', function() {
         .end(done);
     });
 
-    xit('Successful signup logs in a new user', function(done) {
+    it('Successful signup logs in a new user', function(done) {
       request(app)
         .post('/signup')
         .send({
@@ -234,7 +234,7 @@ describe('', function() {
         .end(done);
     });
 
-    xit('Users that do not exist are kept on login page', function(done) {
+    it('Users that do not exist are kept on login page', function(done) {
       request(app)
         .post('/login')
         .send({
