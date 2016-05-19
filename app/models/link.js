@@ -24,23 +24,20 @@ var linkSchema = new mongoose.Schema({
   baseUrl: String,
   code: String,
   title: String,
-  visits: Number
+  visits: Number,
 },
   {
     timestamps: { createdAt: 'created_at' }
   }
 );
 
-linkSchema.methods.remove = function(obj) {
-  // 
-};
-
-linkSchema.methods.addCode = function() {
-  console.log('in add code');
+linkSchema.post('save', function(link) {
   var shasum = crypto.createHash('sha1');
   shasum.update(this.get('url'));
-  return shasum.digest('hex').slice(0, 5);
-};
+  this.set({code: shasum.digest('hex').slice(0, 5)});
+  this.set({title: 'TEST TITLE'});
+});
+
 
 var Link = mongoose.model('Link', linkSchema);
 

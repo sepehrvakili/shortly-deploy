@@ -33,10 +33,6 @@ var userSchema = new mongoose.Schema({
   }
 );
 
-userSchema.methods.remove = function(obj) {
-
-};
-
 var User = mongoose.model('User', userSchema);
 
 module.exports = User;

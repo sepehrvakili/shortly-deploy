@@ -49,7 +49,6 @@ describe('', function() {
           .expect(200)
           .expect(function(res) {
             expect(res.body.url).to.equal('http://www.roflzoo.com/');
-            console.log('res body', res.body);
             expect(res.body.code).to.be.ok;
           })
           .end(done);
@@ -89,7 +88,7 @@ describe('', function() {
 
     }); // 'Shortening Links'
 
-    xdescribe('With previously saved urls: ', function() {
+    describe('With previously saved urls: ', function() {
 
       beforeEach(function(done) {
         link = new Link({
@@ -100,6 +99,7 @@ describe('', function() {
         });
 
         link.save(function() {
+          console.log('SAVED LINK', link);
           done();
         });
       });
@@ -112,14 +112,16 @@ describe('', function() {
             'url': 'http://www.roflzoo.com/'})
           .expect(200)
           .expect(function(res) {
+            console.log('SECOND CODE BODY', res.body);
             var secondCode = res.body.code;
             expect(secondCode).to.equal(firstCode);
           })
           .end(done);
       });
 
-      it('Shortcode redirects to correct url', function(done) {
+      xit('Shortcode redirects to correct url', function(done) {
         var sha = link.code;
+        console.log('SHA IS THIS: ', sha);
         request(app)
           .get('/' + sha)
           .expect(302)
@@ -134,7 +136,7 @@ describe('', function() {
 
   }); // 'Link creation'
 
-  xdescribe('Priviledged Access:', function() {
+  describe('Priviledged Access:', function() {
 
     // /*  Authentication  */
     // // TODO: xit out authentication
@@ -170,7 +172,7 @@ describe('', function() {
 
   }); // 'Privileged Access'
 
-  xdescribe('Account Creation:', function() {
+  describe('Account Creation:', function() {
 
     it('Signup creates a new user', function(done) {
       request(app)
