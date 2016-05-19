@@ -43,8 +43,6 @@ var userSchema = new mongoose.Schema({
 // });
 
 userSchema.methods.comparePassword = function(attemptedPassword, callback) {
-  console.log('start user COMPARED');
-  console.log('PASSWERD', this.get('password'));
   bcrypt.compare(attemptedPassword, this.get('password'), function(err, isMatch) {
     callback(isMatch);
   });

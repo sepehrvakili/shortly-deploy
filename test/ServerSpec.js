@@ -22,6 +22,7 @@ describe('', function() {
         // Delete objects from db so they can be created later for the test
         Link.remove({url: 'http://www.roflzoo.com/'}).exec();
         User.remove({username: 'Savannah'}).exec();
+        User.remove({username: 'Svnh'}).exec();
         User.remove({username: 'Phillip'}).exec();
 
         done();
@@ -99,7 +100,6 @@ describe('', function() {
         });
 
         link.save(function() {
-          console.log('SAVED LINK', link);
           done();
         });
       });
@@ -112,7 +112,6 @@ describe('', function() {
             'url': 'http://www.roflzoo.com/'})
           .expect(200)
           .expect(function(res) {
-            console.log('SECOND CODE BODY', res.body);
             var secondCode = res.body.code;
             expect(secondCode).to.equal(firstCode);
           })
@@ -121,7 +120,6 @@ describe('', function() {
 
       it('Shortcode redirects to correct url', function(done) {
         var sha = link.code;
-        console.log('SHA IS THIS: ', sha);
         request(app)
           .get('/' + sha)
           .expect(302)
@@ -175,6 +173,7 @@ describe('', function() {
   describe('Account Creation:', function() {
 
     it('Signup creates a new user', function(done) {
+      this.timeout(3000);
       request(app)
         .post('/signup')
         .send({
@@ -191,6 +190,7 @@ describe('', function() {
     });
 
     it('Successful signup logs in a new user', function(done) {
+      this.timeout(3000);
       request(app)
         .post('/signup')
         .send({
@@ -199,7 +199,6 @@ describe('', function() {
         .expect(302)
         .expect(function(res) {
           expect(res.headers.location).to.equal('/');
-          console.log('start logout...');
           request(app)
             .get('/logout')
             .expect(200);
@@ -212,6 +211,7 @@ describe('', function() {
   describe('Account Login:', function() {
 
     beforeEach(function(done) {
+      this.timeout(3000);
       new User({
         'username': 'Phillip',
         'password': 'Phillip'
@@ -221,6 +221,7 @@ describe('', function() {
     });
 
     it('Logs in existing users', function(done) {
+      this.timeout(3000);
       request(app)
         .post('/login')
         .send({
@@ -228,7 +229,6 @@ describe('', function() {
           'password': 'Phillip' })
         .expect(302)
         .expect(function(res) {
-          console.log('res', res);
           expect(res.headers.location).to.equal('/');
         })
         .end(done);
