@@ -40,7 +40,7 @@
 var MongoClient = require('mongodb').MongoClient;
 var db = require('mongoose');
 
-var source = process.env.DB_ENV || '104.236.165.238';
+var source = process.env.DB_ENV || '127.0.0.1:27017';
 
 MongoClient.connect('mongodb://' + source + '/myDb', function(err, db) {
   if (err) {
