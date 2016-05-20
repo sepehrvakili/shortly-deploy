@@ -3,9 +3,8 @@ var mongoose = require('mongoose');
 var bcrypt = require('bcrypt-nodejs');
 var Promise = require('bluebird');
 
-var userSchema = new mongoose.Schema({
-  id: Number,
-  username: String,
+var userSchema = mongoose.Schema({
+  username: { type: String, index: { unique: true } },
   password: String
 },
   {
@@ -14,16 +13,20 @@ var userSchema = new mongoose.Schema({
 );
 
 userSchema.methods.comparePassword = function(attemptedPassword, callback) {
-  bcrypt.compare(attemptedPassword, this.get('password'), function(err, isMatch) {
-    callback(isMatch);
+  bcrypt.compare(attemptedPassword, this.password, function(err, isMatch) {
+    if (err) {
+      callback(err);
+    } else {
+      callback(null, isMatch);
+    }
   });
 };
 
 userSchema.pre('save', function(next) {
   var cipher = Promise.promisify(bcrypt.hash);
-  return cipher(this.get('password'), null, null).bind(this)
+  return cipher(this.password, null, null).bind(this)
     .then(function(hash) {
-      this.set({ password: hash });
+      this.password = hash;
       next();
     });
 });

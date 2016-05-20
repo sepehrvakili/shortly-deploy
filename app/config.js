@@ -1,17 +1,13 @@
-var MongoClient = require('mongodb').MongoClient;
-var db = require('mongoose');
+var mongoose = require('mongoose');
 
 var source = process.env.DB_ENV || '127.0.0.1:27017';
+mongoose.connect('mongodb://' + source + '/myDb')
 
-MongoClient.connect('mongodb://' + source + '/myDb', function(err, db) {
-  if (err) {
-    console.log(err);
-    console.error('Not connected to database');
-  } else {
-    console.log('Connected to database');
-  }
+var db = mongoose.connection;
+
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  console.log('MongoDB connection is open');
 });
-
-db.connect('mongodb://' + source + '/myDb');
 
 module.exports = db;
